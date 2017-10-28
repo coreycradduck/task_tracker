@@ -1,0 +1,115 @@
+﻿@model IEnumerable<TaskTracker.Models.Tag>
+
+<div class="jumbotron">
+    <h1>Task Tracker</h1>
+    <p class="lead">Original blueprint for building a productivity application.</p>
+</div>
+
+<div class="row">
+    <h2>Timer controls</h2>
+    <p>Start timestamp:<label id="startTimestamp"></label></p>
+    <p>Stop timestamp:<label id="stopTimestamp"></label></p>
+    <label id="minutes">00</label>:<label id="seconds">00</label>
+</div>
+
+<table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a class="btn btn-success" onclick="startTask(this)" data-tag-id="@item.Id">
+                    <i class="fa fa-play" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-danger" onclick="stopTask(this)" data-tag-id="@item.Id">
+                    <i class="fa fa-stop" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<script type="text/javascript">
+    var myTimer;
+
+    function startTask(d) {
+        myTimer = setInterval(startTimer, 1000);
+
+        var ts = new Date();
+        var tagId = d.getAttribute("data-tag-id");
+        var startTimestamp = document.getElementById("startTimestamp");
+        startTimestamp.innerHTML = ts.getFullYear() + "-" + (ts.getMonth() + 1) + "-" + ts.getDate() + " " + pad(ts.getHours()) + ":" + pad(ts.getMinutes()) + ":" + pad(ts.getSeconds());
+
+        var minutesLabel = document.getElementById("minutes");
+        var secondsLabel = document.getElementById("seconds");
+        var totalSeconds = 0
+
+        function startTimer() {
+            ++totalSeconds;
+            secondsLabel.innerHTML = pad(totalSeconds % 60);
+            minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+        }
+    }
+
+    function stopTask(d) {
+        clearInterval(myTimer);
+
+        var ts = new Date();
+        var tagId = d.getAttribute("data-tag-id");
+        var startTimestamp = document.getElementById("startTimestamp");
+        var stopTimestamp = document.getElementById("stopTimestamp");
+        stopTimestamp.innerHTML = ts.getFullYear() + "-" + (ts.getMonth() + 1) + "-" + ts.getDate() + " " + pad(ts.getHours()) + ":" + pad(ts.getMinutes()) + ":" + pad(ts.getSeconds());
+        console.log(tagId);
+        console.log(startTimestamp.innerHTML);
+        console.log(stopTimestamp.innerHTML);
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            url: "/Timers/Create/",
+            data: "{'TaskId':" + tagId + ", 'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}",
+            async: true
+        })
+
+        console.log("{'TaskId':" + tagId + ", 'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}")
+    }
+
+    function stopClock() {
+        clearInterval(myTimer)
+        var d = new Date();
+        var startTimestamp = document.getElementById("startTimestamp");
+        var stopTimestamp = document.getElementById("stopTimestamp");
+        stopTimestamp.innerHTML = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+        $('#stopButton').fadeOut(250);
+        $('#startButton').fadeIn(250);
+        console.log(startTimestamp.innerHTML);
+        console.log(stopTimestamp.innerHTML);
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            url: "/Timers/Create/",
+            data: "{'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}",
+            async: true
+        })
+
+        console.log("{'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}");
+    }
+
+    function pad(val) {
+        var valString = val + "";
+        if (valString.length < 2) {
+            return "0" + valString;
+        }
+        else {
+            return valString;
+        }
+    }
+</script>
