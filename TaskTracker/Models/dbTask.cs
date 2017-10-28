@@ -37,4 +37,13 @@ namespace TaskTracker.Models
         public int Id { get; set; }
         public string Description { get; set; }
     }
+
+    public class TimerTagViewModel
+    {
+        public int TimerId { get; set; }
+        public int TaskId { get; set; }
+        public string Description { get; set; }
+        public DateTime start_timestamp { get; set; }
+        public DateTime end_timestamp { get; set; }
+    }
 }

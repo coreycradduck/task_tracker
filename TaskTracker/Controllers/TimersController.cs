@@ -17,7 +17,15 @@ namespace TaskTracker.Controllers
         // GET: Timers
         public ActionResult Index()
         {
-            return View(db.Timers.ToList());
+            var viewModel = from ts in db.Timers
+                            join tg in db.Tags on ts.TaskId equals tg.Id
+                            select new TimerTagViewModel { TimerId = ts.Id,
+                                TaskId = tg.Id,
+                                Description = tg.Description,
+                                start_timestamp = ts.start_timestamp,
+                                end_timestamp = ts.end_timestamp};
+
+            return View(viewModel.ToList());
         }
 
         // GET: Timers/Details/5
