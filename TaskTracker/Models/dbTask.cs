@@ -46,4 +46,10 @@ namespace TaskTracker.Models
         public DateTime start_timestamp { get; set; }
         public DateTime end_timestamp { get; set; }
     }
+
+    public class SummaryViewModel
+    {
+        public string Description { get; set; }
+        public int SecDiff { get; set; }
+    }
 }

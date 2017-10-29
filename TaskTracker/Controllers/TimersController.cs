@@ -28,6 +28,20 @@ namespace TaskTracker.Controllers
             return View(viewModel.ToList());
         }
 
+        // GET: Timers/Summary
+        public ActionResult Summary()
+        {
+            var viewModel = from ts in db.Timers
+                            join tg in db.Tags on ts.TaskId equals tg.Id
+                            select new SummaryViewModel
+                            {
+                                Description = tg.Description,
+                                SecDiff = DbFunctions.DiffSeconds(ts.start_timestamp, ts.end_timestamp)
+                            };
+
+            return View(viewModel.ToList());
+        }
+
         // GET: Timers/Details/5
         public ActionResult Details(int? id)
         {

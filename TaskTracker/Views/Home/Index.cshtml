@@ -80,29 +80,6 @@
         console.log("{'TaskId':" + tagId + ", 'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}")
     }
 
-    function stopClock() {
-        clearInterval(myTimer)
-        var d = new Date();
-        var startTimestamp = document.getElementById("startTimestamp");
-        var stopTimestamp = document.getElementById("stopTimestamp");
-        stopTimestamp.innerHTML = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
-        $('#stopButton').fadeOut(250);
-        $('#startButton').fadeIn(250);
-        console.log(startTimestamp.innerHTML);
-        console.log(stopTimestamp.innerHTML);
-
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: "/Timers/Create/",
-            data: "{'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}",
-            async: true
-        })
-
-        console.log("{'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}");
-    }
-
     function pad(val) {
         var valString = val + "";
         if (valString.length < 2) {
