@@ -3,6 +3,7 @@ namespace TaskTracker.Models
     using System;
     using System.Data.Entity;
     using System.Linq;
+    using System.Collections.Generic;
 
     public class dbTask : DbContext
     {
@@ -51,5 +52,11 @@ namespace TaskTracker.Models
     {
         public string Description { get; set; }
         public int? SecDiff { get; set; }
+    }
+
+    public class TagsAndRecentTimers
+    {
+        public IEnumerable<Tag> Tag { get; set; }
+        public IEnumerable<TimerTagViewModel> TimerTag { get; set; }
     }
 }

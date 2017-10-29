@@ -1,5 +1,4 @@
-﻿@model IEnumerable<TaskTracker.Models.Tag>
-
+﻿@model TaskTracker.Models.TagsAndRecentTimers
 <div class="jumbotron">
     <h1>Task Tracker</h1>
     <p class="lead">Original blueprint for building a productivity application.</p>
@@ -7,13 +6,14 @@
 
 <div class="row">
     <h2>Timer controls</h2>
+    <p>Timer tag:<label id="timerTag" data-description="" data-tag-id=""></label></p>
     <p>Start timestamp:<label id="startTimestamp"></label></p>
     <p>Stop timestamp:<label id="stopTimestamp"></label></p>
     <label id="minutes">00</label>:<label id="seconds">00</label>
 </div>
 
 <table>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Tag)
     {
         <tr>
             
@@ -34,8 +34,41 @@
     }
 </table>
 
+<h3>Recent timers</h3>
+<table class="table">
+    @foreach (var item in Model.TimerTag)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.start_timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.end_timestamp)
+            </td>
+
+        </tr>
+    }
+</table>
+<hr />
+<h4>Tag functionality</h4>
+@foreach (var item in Model.Tag)
+{
+    <button class="btn btn-default" onclick="addTag(this)" data-tag-id="@item.Id">@Html.DisplayFor(modelItem => item.Description)</button>
+}
+
+
 <script type="text/javascript">
     var myTimer;
+
+    function addTag(d) {
+        var tagName = d.innerHTML;
+        var tagId = d.getAttribute("data-tag-id");
+        var tagLabel = document.getElementById("timerTag");
+        tagLabel.innerHTML = tagName;
+    }
 
     function startTask(d) {
         myTimer = setInterval(startTimer, 1000);
@@ -78,6 +111,7 @@
         })
 
         console.log("{'TaskId':" + tagId + ", 'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}")
+        window.location.reload();
     }
 
     function pad(val) {
