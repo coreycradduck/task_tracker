@@ -1,26 +1,21 @@
-﻿@model IEnumerable<TaskTracker.Models.TimerTagViewModel>
+﻿@model IEnumerable<TaskTracker.Models.SummaryViewModel>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Summary</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
             Tag
         </th>
         <th>
-            Start Timestamp
+            SecDiff
         </th>
-        <th>
-            End Timestamp
-        </th>
+
     </tr>
 
 @foreach (var item in Model) {
@@ -29,10 +24,7 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.start_timestamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.end_timestamp)
+            @Html.DisplayFor(modelItem => item.SecDiff)
         </td>
     </tr>
 }

@@ -39,7 +39,15 @@ namespace TaskTracker.Controllers
                                 SecDiff = DbFunctions.DiffSeconds(ts.start_timestamp, ts.end_timestamp)
                             };
 
-            return View(viewModel.ToList());
+            var sumModel = viewModel.GroupBy(x => x.Description)
+                .Select(y => new SummaryViewModel
+                {
+                    Description = y.Key,
+                    SecDiff = y.Sum(x => x.SecDiff)
+                })
+                .OrderByDescending(o => o.SecDiff);
+
+            return View(sumModel);
         }
 
         // GET: Timers/Details/5

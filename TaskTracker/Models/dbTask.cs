@@ -50,6 +50,6 @@ namespace TaskTracker.Models
     public class SummaryViewModel
     {
         public string Description { get; set; }
-        public int SecDiff { get; set; }
+        public int? SecDiff { get; set; }
     }
 }
