@@ -15,5 +15,10 @@ namespace TaskTracker.Controllers
         {
             return View(db.Tags.ToList());
         }
+
+        public ActionResult Journal()
+        {
+            return View();
+        }
     }
 }
