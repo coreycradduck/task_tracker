@@ -10,6 +10,7 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -21,7 +22,9 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            <button type="button" class="btn btn-default btn-group-sm" data-toggle="modal" data-target="#myModal" data-tag-id="@item.Id" onclick="modalFetch(this)">
+                @Html.DisplayFor(modelItem => item.Description)
+            </button>
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
@@ -31,3 +34,32 @@
 }
 
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" id="myModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function modalFetch(d) {
+        var tagName = d.innerHTML;
+        var tagId = d.getAttribute("data-tag-id");
+        var myModalLabel = document.getElementById("myModalLabel");
+        myModalLabel.innerHTML = tagName;
+
+        var modalBody = document.getElementById("myModalBody")
+        modalBody.innerHTML = "This is the best project ever!  Love that shit so much! Please God, smile upon me and give me more " + tagName + " so that I'll never be lonely!"
+    }
+</script>

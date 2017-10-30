@@ -6,39 +6,29 @@
 
 <div class="row">
     <h2>Timer controls</h2>
-    <p>Timer tag:<label id="timerTag" data-description="" data-tag-id=""></label></p>
-    <p>Start timestamp:<label id="startTimestamp"></label></p>
-    <p>Stop timestamp:<label id="stopTimestamp"></label></p>
-    <label id="minutes">00</label>:<label id="seconds">00</label>
+    <p>Timer tag:  <label id="timerTag" data-description="" data-tag-id=""></label></p>
+    <p>Start timestamp:  <label id="startTimestamp"></label></p>
+    <p>Stop timestamp:  <label id="stopTimestamp"></label></p>
+    <h3><label id="minutes">00</label>:<label id="seconds">00</label></h3>
+    <p>
+        <a id="btnTimer" class="btn btn-success" onclick="timerControl(this)">
+            <i class="fa fa-play" aria-hidden="true"></i>
+            <i class="fa fa-stop" aria-hidden="true"></i>
+        </a>
+        <a class="btn btn-success" onclick="startTask(this)">
+            <i class="fa fa-play" aria-hidden="true"></i>
+        </a>
+        <a class="btn btn-danger" onclick="stopTask(this)">
+            <i class="fa fa-stop" aria-hidden="true"></i>
+        </a>
+    </p>
 </div>
 
-<table>
-    @foreach (var item in Model.Tag)
-    {
-        <tr>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a class="btn btn-success" onclick="startTask(this)" data-tag-id="@item.Id">
-                    <i class="fa fa-play" aria-hidden="true"></i>
-                </a>
-            </td>
-            <td>
-                <a class="btn btn-danger" onclick="stopTask(this)" data-tag-id="@item.Id">
-                    <i class="fa fa-stop" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-    }
-</table>
-
 <h3>Recent timers</h3>
-<table class="table">
+<table id="recentTimers" class="table">
     @foreach (var item in Model.TimerTag)
     {
-        <tr>
+        <tr class="clickable-row">
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
@@ -48,7 +38,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.end_timestamp)
             </td>
-
+            <td>
+                <i id="check" class="fa fa-2x fa-check" aria-hidden="true"></i>
+                <i id="trash" class="fa fa-2x fa-trash" aria-hidden="true"></i>
+            </td>
         </tr>
     }
 </table>
@@ -61,7 +54,19 @@
 
 
 <script type="text/javascript">
+    $('#recentTimers').on('click', '.clickable-row', function (event) {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+
     var myTimer;
+
+    function timerControl(d) {
+        console.log("Sup!");
+        $("#btnTimer").toggleClass("btn btn-danger");
+        $("#btnTimer").toggleClass("btn btn-success");
+        $("#btnIcon").toggleClass("fa fa-stop");
+        $("#btnIcon").toggleClass("fa fa-play")
+    }
 
     function addTag(d) {
         var tagName = d.innerHTML;
@@ -111,7 +116,6 @@
         })
 
         console.log("{'TaskId':" + tagId + ", 'start_timestamp':'" + startTimestamp.innerHTML + "', 'end_timestamp':'" + stopTimestamp.innerHTML + "'}")
-        window.location.reload();
     }
 
     function pad(val) {
